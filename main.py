@@ -1,9 +1,5 @@
-import numpy as np
-from matplotlib import pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import time
+
 import math
-import pygame as pg 
 import random
 from vectors import v
 
@@ -24,7 +20,9 @@ class Object:
                 continue
             forces.append(self.system.calculate_gravitational_force(self, obj))
 
-        F = forces[0] + forces[1]
+        F = v(0,0,0)
+        for Fi in forces:
+            F += Fi
         return F
 
     def update_velocity(self, dt):
@@ -61,15 +59,6 @@ class System:
         for obj in self.objects:
             obj.update_position(dt)
 
-
-plt.ion()
-fig = plt.figure(figsize=(8,8))
-
-ax = fig.add_subplot(111, projection='3d')
-
-
-
-
 def main():
     helocentric = System()
     earth = Object(helocentric, v(1.4989e11, 0, 0), v(0, 3e4, 0), m = 5.972e24, r = 6_371_000)
@@ -82,7 +71,7 @@ def main():
     while i < 100:
         elapsed += dt
         helocentric.update_objects(dt)
-        if elapsed > 360*24:
+        if elapsed > 360*24*365:
             i+=1
 
 
